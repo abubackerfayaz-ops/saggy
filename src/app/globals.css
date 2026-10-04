@@ -1,26 +1,136 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Font Variables ──────────────────────────────────────────────────────── */
+@theme {
+  /* New 9-font system */
+  --font-logo-class:    var(--font-logo), "Impact", sans-serif;       /* Black Han Sans — logo */
+  --font-hero-class:    var(--font-hero), "Arial Black", sans-serif;  /* Russo One — hero headline */
+  --font-heading-class: var(--font-heading), "Impact", sans-serif;    /* Anton — section headings */
+  --font-pill-class:    var(--font-pill), "Arial Narrow", sans-serif; /* Barlow Condensed — pills, tags */
+  --font-product-class: var(--font-product), "Segoe UI", sans-serif;  /* Exo 2 — product names */
+  --font-price-class:   var(--font-price), "Courier New", monospace;  /* Orbitron — prices/numbers */
+  --font-label-class:   var(--font-label), "Verdana", sans-serif;     /* Rajdhani — category labels */
+  --font-accent-class:  var(--font-accent), "Georgia", serif;         /* Playfair Display — editorial */
+  --font-cta-class:     var(--font-cta), "Arial Narrow", sans-serif;  /* Teko — buttons/CTAs */
+  --font-body-class:    var(--font-body), "Segoe UI", system-ui, sans-serif; /* DM Sans — body */
+
+  --color-brand:        #111111;
+  --color-brand-accent: #000000;
+  --color-brand-orange: #f97316;
+  --color-surface:      #ffffff;
+  --color-surface-bg:   #f8f8f8;
+  --color-border:       #e5e5e5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Named font utility classes — 9 font system */
+.font-logo    { font-family: var(--font-logo),    "Impact", sans-serif; }
+.font-hero    { font-family: var(--font-hero),    "Arial Black", sans-serif; }
+.font-heading { font-family: var(--font-heading), "Impact", sans-serif; }
+.font-pill    { font-family: var(--font-pill),    "Arial Narrow", sans-serif; }
+.font-product { font-family: var(--font-product), "Segoe UI", sans-serif; }
+.font-price   { font-family: var(--font-price),   "Courier New", monospace; }
+.font-label   { font-family: var(--font-label),   "Verdana", sans-serif; }
+.font-accent  { font-family: var(--font-accent),  "Georgia", serif; }
+.font-cta     { font-family: var(--font-cta),     "Arial Narrow", sans-serif; }
+.font-body    { font-family: var(--font-body),    "Segoe UI", system-ui, sans-serif; }
+
+/* Legacy aliases — kept for any old references not yet migrated */
+.font-bebas   { font-family: var(--font-logo),    "Impact", sans-serif; }
+.font-dm      { font-family: var(--font-body),    "Segoe UI", system-ui, sans-serif; }
+.font-anton   { font-family: var(--font-heading), "Impact", sans-serif; }
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0A0A0A;
+  color: #EDEDED;
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
+
+/* ─── Culture Circle Product Card ────────────────────────────────────────── */
+.cc-card {
+  background-color: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cc-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── Pill Button / Filter Tab (Culture Circle Signature) ────────────────── */
+.cc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.cc-pill-inactive {
+  background-color: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c4c4c4;
+}
+.cc-pill-inactive:hover {
+  background-color: #222222;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.cc-pill-active {
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+}
+
+/* ─── Verified Legit Check Badge ─────────────────────────────────────────── */
+.cc-badge-verified {
+  background-color: rgba(6, 78, 59, 0.35);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* ─── Custom Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}
+
+/* ─── Text Selection ──────────────────────────────────────────────────────── */
+::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* ─── Horizontal Marquee ─────────────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 25s linear infinite; }
