@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Heart, ShoppingBag, Star, ShieldCheck, Check, ArrowRight } from "lucide-react";
+import { Heart, ArrowRight } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import type { Product, ProductImage, ProductVariant, Category } from "@prisma/client";
 
@@ -93,16 +93,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* ── Product Info (Culture Circle Clean Typography) ──────────────── */}
       <div className="pt-3 flex flex-col flex-1 justify-between gap-2.5">
         <div>
-          {/* Brand & Legit Badge */}
-          <div className="flex items-center justify-between gap-1 text-[11px]">
-            <span className="font-label font-bold text-neutral-400 uppercase tracking-widest truncate">
-              {product.brand}
-            </span>
-            <div className="flex items-center gap-1 text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0">
-              <Check className="w-2.5 h-2.5 text-emerald-400 stroke-[3]" />
-              <span className="font-label">Verified</span>
-            </div>
-          </div>
+          {/* Brand */}
+          <span className="font-label font-bold text-neutral-400 uppercase tracking-widest truncate block text-[11px]">
+            {product.brand}
+          </span>
 
           {/* Product Title */}
           <Link href={`/shop/${product.slug}`} className="block mt-1">

@@ -14,6 +14,7 @@ import {
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { CartProvider } from "@/components/cart/CartProvider";
 
 // Might / Skybold / Victory match — ultra-bold Korean-inspired block caps
 // Used for: SAGGY logo wordmark
@@ -155,9 +156,11 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-[#0A0A0A] text-[#EDEDED] selection:bg-white selection:text-black antialiased"
         style={{ fontFamily: 'var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}
       >
-        <Navbar />
-        <main className="flex-1 w-full">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-1 w-full">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

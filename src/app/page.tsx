@@ -5,7 +5,6 @@ import { formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/products/ProductCard";
 import {
   ArrowRight,
-  ShieldCheck,
   CheckCircle2,
   TrendingUp,
   Sparkles,
@@ -87,7 +86,7 @@ export default async function HomePage() {
           <div className="relative z-20 flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-pill font-bold text-white border border-white/20 tracking-widest">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              AUTHENTICATED MARKETPLACE · {totalShirtsCount}+ VERIFIED STYLES
+              CURATED MARKETPLACE · {totalShirtsCount}+ STYLES
             </span>
           </div>
 
@@ -97,7 +96,7 @@ export default async function HomePage() {
               THE HOME OF <span className="underline decoration-orange-500 underline-offset-8">CURATED</span> SHIRTS.
             </h1>
             <p className="font-body text-sm sm:text-base text-neutral-300 max-w-xl leading-relaxed">
-              Discover authenticated curated shirts at the guaranteed lowest price. 100% physically inspected & verified before shipping.
+              Discover curated shirts at the guaranteed lowest price, delivered straight to your door.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -272,7 +271,7 @@ export default async function HomePage() {
                 {cat.name}
               </h3>
               <p className="font-body text-xs text-neutral-400 mt-1 line-clamp-1">
-                {cat.description || "Authentic curated shirts"}
+                {cat.description || "Curated shirts"}
               </p>
             </Link>
           ))}

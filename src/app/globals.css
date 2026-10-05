@@ -99,13 +99,6 @@ body {
   color: #000000;
 }
 
-/* ─── Verified Legit Check Badge ─────────────────────────────────────────── */
-.cc-badge-verified {
-  background-color: rgba(6, 78, 59, 0.35);
-  color: #6ee7b7;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
 /* ─── Custom Scrollbar ────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
@@ -134,3 +127,16 @@ body {
   to   { transform: translateX(-50%); }
 }
 .marquee-track { animation: marquee 25s linear infinite; }
+
+/* ─── Hide Scrollbar (no-scrollbar) ──────────────────────────────────────── */
+.no-scrollbar {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE / Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
+}
+
+/* ─── h-13 / w-13 utility (used in AddToCartSection) ─────────────────────── */
+.h-13 { height: 3.25rem; }
+.w-13 { width: 3.25rem; }

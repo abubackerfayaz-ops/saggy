@@ -1,20 +1,24 @@
+# Render Blueprint — SAGGY
+#
+# BUILD never touches the database, so a DB hiccup can NEVER fail the build
+# (a failed build = persistent Bad Gateway). Schema + data already live in
+# Supabase; DATABASE_URL is only needed at runtime, and every page query is
+# wrapped in try/catch so even a missing DATABASE_URL renders empty states
+# instead of crashing the server.
+#
+# ⚠️ ACTION REQUIRED (one time): Render Dashboard → slaggy → Environment
+#     Set DATABASE_URL to your Supabase session-pooler string:
+#     postgresql://postgres.mxmeixinyhldzwzazjjd:<PASSWORD>@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require&schema=public
+
 services:
   - type: web
-    name: slaggy
+    name: saggy
     runtime: node
     plan: free
-    buildCommand: npm install && npx prisma generate && npx prisma db push && npx prisma db seed && npm run build
+    buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: slaggy-db
-          property: connectionString
-
-databases:
-  - name: slaggy-db
-    plan: free
-    databaseName: postgres
-    user: postgres
+        sync: false

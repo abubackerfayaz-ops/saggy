@@ -6,8 +6,8 @@ import prisma from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
 import AddToCartSection from "@/components/products/AddToCartSection";
 import {
-  Star, Package, Truck, RotateCcw, ShieldCheck, Info,
-  ChevronRight, Layers, Ruler, Shirt, Check
+  Star, Package, Truck, RotateCcw, Info,
+  ChevronRight, Layers, Ruler, Shirt
 } from "lucide-react";
 
 export async function generateMetadata({
@@ -16,10 +16,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    select: { name: true, brand: true, description: true, sellingPrice: true },
-  });
+
+  let product = null;
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug },
+      select: { name: true, brand: true, description: true, sellingPrice: true },
+    });
+  } catch (error) {
+    console.error("[Product metadata] Failed:", error);
+  }
 
   if (!product) return { title: "Product Not Found | SAGGY" };
 
@@ -27,7 +33,7 @@ export async function generateMetadata({
     title: `${product.name} by ${product.brand} | SAGGY`,
     description:
       product.description ??
-      `Buy ${product.name} by ${product.brand} at ${formatPrice(product.sellingPrice)}. Curated and physically verified before shipping.`,
+      `Buy ${product.name} by ${product.brand} at ${formatPrice(product.sellingPrice)}. Curated shirts at the guaranteed lowest price.`,
     openGraph: {
       title: `${product.name} | SAGGY`,
       description: product.description ?? "",
@@ -42,25 +48,46 @@ export default async function ProductPage({
 }) {
   const { slug } = await params;
 
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      images: { orderBy: { sortOrder: "asc" } },
-      variants: { orderBy: { size: "asc" } },
-      category: true,
-      reviews: { orderBy: { createdAt: "desc" }, take: 5 },
-    },
-  });
+  let product;
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug },
+      include: {
+        images: { orderBy: { sortOrder: "asc" } },
+        variants: { orderBy: { size: "asc" } },
+        category: true,
+        reviews: { orderBy: { createdAt: "desc" }, take: 5 },
+      },
+    });
+  } catch (error) {
+    console.error("[Product page] Failed to load:", error);
+    notFound();
+  }
 
   if (!product || !product.isActive) {
     notFound();
   }
 
-  const SIZE_ORDER = ["S", "M", "L", "XL", "XXL"];
-  const availableSizes = [...new Set(product.variants.map((v) => v.size))].sort(
-    (a, b) => SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b)
-  );
-  const inStockSizes = product.variants.filter((v) => v.inStock).map((v) => v.size);
+  const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "XXL", "3XL"];
+  const sizeRank = (s: string) => {
+    const i = SIZE_ORDER.indexOf(s);
+    return i === -1 ? SIZE_ORDER.length : i;
+  };
+
+  let availableSizes = [
+    ...new Set(product.variants.map((v) => v.size)),
+  ].sort((a, b) => sizeRank(a) - sizeRank(b) || a.localeCompare(b));
+  let inStockSizes = product.variants
+    .filter((v) => v.inStock)
+    .map((v) => v.size);
+
+  // Fallback: products without migrated variants still need selectable sizes
+  if (availableSizes.length === 0) {
+    availableSizes = ["S", "M", "L", "XL", "XXL"];
+    inStockSizes = [...availableSizes];
+  } else if (inStockSizes.length === 0) {
+    inStockSizes = [...availableSizes];
+  }
 
   const primaryImage =
     product.images[0]?.url ??
@@ -105,13 +132,6 @@ export default async function ProductPage({
                 className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              {/* Authenticity Pill */}
-              <div className="absolute top-4 left-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-pill font-bold uppercase tracking-wider bg-black/80 text-white rounded-full shadow-md backdrop-blur-md border border-white/20">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  {product.source} VERIFIED
-                </span>
-              </div>
             </div>
 
             {/* Thumbnail Carousel */}
@@ -137,25 +157,19 @@ export default async function ProductPage({
 
           {/* RIGHT: Product Details (Culture Circle Marketplace Style) */}
           <div className="space-y-6">
-            {/* Brand + Legit Badge */}
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <span className="text-xs font-label font-bold uppercase tracking-widest text-neutral-400">
-                  {product.brand}
-                </span>
-                {product.category && (
-                  <Link
-                    href={`/shop?category=${product.category.name}`}
-                    className="ml-2 text-xs font-pill uppercase tracking-wider text-neutral-500 hover:text-white transition-colors"
-                  >
-                    / {product.category.name}
-                  </Link>
-                )}
-              </div>
-              <div className="flex items-center gap-1.5 bg-emerald-950/60 text-emerald-400 px-3 py-1 rounded-full text-xs font-pill uppercase tracking-wider font-bold border border-emerald-800/40">
-                <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                <span>Verified Authentic</span>
-              </div>
+            {/* Brand */}
+            <div>
+              <span className="text-xs font-label font-bold uppercase tracking-widest text-neutral-400">
+                {product.brand}
+              </span>
+              {product.category && (
+                <Link
+                  href={`/shop?category=${product.category.name}`}
+                  className="ml-2 text-xs font-pill uppercase tracking-wider text-neutral-500 hover:text-white transition-colors"
+                >
+                  / {product.category.name}
+                </Link>
+              )}
             </div>
 
             {/* Title */}
@@ -184,7 +198,7 @@ export default async function ProductPage({
 
               <div className="flex items-center gap-2 text-xs font-body text-neutral-400 pt-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                <span>All taxes & verification fees included · Best price guaranteed across marketplaces</span>
+                <span>All taxes included · Best price guaranteed across marketplaces</span>
               </div>
             </div>
 
@@ -261,7 +275,7 @@ export default async function ProductPage({
               </div>
             )}
 
-            {/* Delivery & Authentication Assurances */}
+            {/* Delivery Assurances */}
             <div className="space-y-3 pt-2">
               <div className="flex items-start gap-3 p-3.5 bg-[#121212] rounded-2xl border border-white/10">
                 <Truck className="w-4 h-4 text-neutral-300 mt-0.5 shrink-0" />
@@ -278,10 +292,10 @@ export default async function ProductPage({
                 </div>
               </div>
               <div className="flex items-start gap-3 p-3.5 bg-[#121212] rounded-2xl border border-white/10">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                <Info className="w-4 h-4 text-neutral-300 mt-0.5 shrink-0" />
                 <div>
-                  <span className="text-xs font-label uppercase tracking-wider font-bold text-white">100% Quality Checked</span>
-                  <p className="text-[11px] font-body text-neutral-400 mt-0.5">Physical check conducted before dispatch to ensure fabric integrity.</p>
+                  <span className="text-xs font-label uppercase tracking-wider font-bold text-white">Best Price Guarantee</span>
+                  <p className="text-[11px] font-body text-neutral-400 mt-0.5">Lowest price compared across major marketplaces.</p>
                 </div>
               </div>
             </div>
@@ -293,7 +307,7 @@ export default async function ProductPage({
         {product.reviews.length > 0 && (
           <section className="mt-16 border-t border-white/10 pt-10">
             <h2 className="text-xl font-heading uppercase tracking-wide text-white mb-6">
-              Verified Buyer Reviews
+              Customer Reviews
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {product.reviews.map((review) => (
@@ -315,11 +329,6 @@ export default async function ProductPage({
                     <p className="text-xs font-heading uppercase text-white mb-1">{review.title}</p>
                   )}
                   <p className="text-xs font-body text-neutral-300 leading-relaxed">{review.comment}</p>
-                  {review.isVerified && (
-                    <span className="mt-2.5 inline-flex items-center gap-1 text-[10px] font-pill uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded-full font-bold">
-                      <Check className="w-3 h-3 text-emerald-400 stroke-[3]" /> Verified Purchase
-                    </span>
-                  )}
                 </div>
               ))}
             </div>

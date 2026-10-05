@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ShieldCheck, Truck, RotateCcw, Tag, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { Truck, RotateCcw, Tag, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -7,14 +8,14 @@ export default function Footer() {
       {/* ── Trust Pillars Bar (Culture Circle Style) ─────────────────────── */}
       <div className="border-b border-[#1E1E1E] bg-[#0A0A0A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-3">
               <div className="p-2.5 rounded-xl bg-white/5 text-white shrink-0 border border-white/10">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <Tag className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <h4 className="text-xs sm:text-sm font-label font-bold text-white uppercase tracking-wider">100% Legit Check</h4>
-                <p className="text-xs font-body text-[#888888] mt-0.5">Physical quality verification before dispatch.</p>
+                <h4 className="text-xs sm:text-sm font-label font-bold text-white uppercase tracking-wider">Lowest Prices</h4>
+                <p className="text-xs font-body text-[#888888] mt-0.5">Best price guaranteed across marketplaces.</p>
               </div>
             </div>
 
@@ -24,7 +25,7 @@ export default function Footer() {
               </div>
               <div>
                 <h4 className="text-xs sm:text-sm font-label font-bold text-white uppercase tracking-wider">Pan-India Express</h4>
-                <p className="text-xs font-body text-[#888888] mt-0.5">Inspected & delivered across 25,000+ pin codes.</p>
+                <p className="text-xs font-body text-[#888888] mt-0.5">Delivered across 25,000+ pin codes.</p>
               </div>
             </div>
 
@@ -47,19 +48,22 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="inline-block">
-              <div className="flex items-center gap-1.5">
-                <span className="font-logo text-3xl sm:text-4xl tracking-wider text-white">
-                  SAGGY
-                </span>
-                <span className="w-2 h-2 rounded-full bg-orange-500 mb-1" />
+              <div className="relative h-14 w-[160px]">
+                <Image
+                  src="/saggy-logo.jpg"
+                  alt="SAGGY"
+                  fill
+                  className="object-contain object-left"
+                  sizes="160px"
+                />
               </div>
             </Link>
             <p className="text-xs sm:text-sm font-body text-[#888888] leading-relaxed max-w-sm">
-              India&apos;s authentic fashion discovery marketplace. Curated, physically inspected garments delivered directly to you.
+              India&apos;s curated fashion discovery marketplace. Trend-forward garments delivered directly to you.
             </p>
             <div className="pt-2 flex items-center gap-2 text-xs font-label uppercase tracking-wider text-[#AAAAAA]">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Curated Sourcing · Physical Inspection</span>
+              <span>Curated Sourcing · Quality Fabrics</span>
             </div>
           </div>
 
@@ -139,7 +143,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs font-pill tracking-wide text-[#AAAAAA]">
               <li>
                 <Link href="/#how-it-works" className="hover:text-white transition-colors">
-                  Authenticity Standard
+                  How It Works
                 </Link>
               </li>
 
@@ -180,7 +184,7 @@ export default function Footer() {
         {/* ── Bottom Copyright ────────────────────────────────────────────── */}
         <div className="mt-10 pt-6 border-t border-[#181818] flex flex-col sm:flex-row items-center justify-between text-xs font-body text-[#666666] gap-3">
           <p>© 2026 SAGGY — Curated Fashion Marketplace. All rights reserved.</p>
-          <p className="text-[#555555] font-label uppercase tracking-wider">100% Authentic Products · Verified Lowest Prices</p>
+          <p className="text-[#555555] font-label uppercase tracking-wider">Curated Products · Lowest Prices</p>
         </div>
       </div>
     </footer>

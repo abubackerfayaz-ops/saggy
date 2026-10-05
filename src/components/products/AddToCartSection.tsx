@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ShoppingBag, Heart, Zap, X, CheckCircle, Printer } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/components/cart/CartProvider";
 
 interface ProductInfo {
   id: string;
@@ -34,7 +35,7 @@ interface AddToCartSectionProps {
 type FlowStep = "idle" | "qr" | "bill";
 
 function generateOrderId() {
-  return "SLG" + Date.now().toString(36).toUpperCase();
+  return "SGY" + Date.now().toString(36).toUpperCase();
 }
 
 export default function AddToCartSection({
@@ -53,6 +54,7 @@ export default function AddToCartSection({
   const [orderTime] = useState(() =>
     new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
   );
+  const { addItem } = useCart();
 
   const selectedVariant = variants.find(
     (v) => v.size === selectedSize && v.inStock
@@ -66,6 +68,19 @@ export default function AddToCartSection({
       setTimeout(() => setSizeError(false), 1500);
       return;
     }
+    addItem(
+      {
+        productId: product.id,
+        slug: product.slug,
+        name: product.name,
+        brand: product.brand,
+        size: selectedSize,
+        color: selectedVariant?.color ?? null,
+        price: product.sellingPrice,
+        image: product.primaryImage,
+      },
+      quantity
+    );
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2500);
   };
@@ -303,8 +318,16 @@ export default function AddToCartSection({
 
             {/* Receipt */}
             <div className="px-6 py-5 space-y-3">
-              <div className="text-center mb-2">
-                <p className="text-lg font-heading text-white tracking-widest uppercase">SAGGY</p>
+              <div className="text-center mb-2 flex flex-col items-center">
+                <div className="relative h-10 w-[110px] mb-1">
+                  <Image
+                    src="/saggy-logo.jpg"
+                    alt="SAGGY"
+                    fill
+                    className="object-contain"
+                    sizes="110px"
+                  />
+                </div>
                 <p className="text-xs text-neutral-500 font-body">Official Receipt</p>
               </div>
               <div className="border-t border-dashed border-white/10" />

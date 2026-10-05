@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, Heart, Search, Menu, X, ShieldCheck, Flame, SlidersHorizontal } from "lucide-react";
+import Image from "next/image";
+import { ShoppingBag, Heart, Search, Menu, X, SlidersHorizontal } from "lucide-react";
+import { useCart } from "@/components/cart/CartProvider";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { count } = useCart();
 
   const categoryPills = [
     { label: "All Drops", href: "/shop", isHot: false },
@@ -37,17 +40,18 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Brand Logo - Culture Circle Style Bold Modern Wordmark */}
-          <Link href="/" className="flex flex-col group shrink-0">
-            <div className="flex items-center gap-1.5">
-              <span className="font-logo text-3xl sm:text-4xl tracking-wider text-white group-hover:opacity-80 transition-opacity leading-none">
-                SAGGY
-              </span>
-              <span className="w-2 h-2 rounded-full bg-orange-500 mb-1" />
+          {/* Brand Logo - Saggy Image Logo */}
+          <Link href="/" className="flex items-center shrink-0 group">
+            <div className="relative h-12 sm:h-14 w-[120px] sm:w-[150px] overflow-hidden">
+              <Image
+                src="/saggy-logo.jpg"
+                alt="SAGGY"
+                fill
+                priority
+                className="object-contain object-left group-hover:opacity-80 transition-opacity"
+                sizes="150px"
+              />
             </div>
-            <span className="text-[9px] uppercase font-pill font-bold tracking-[0.25em] text-neutral-400 -mt-0.5 hidden sm:block">
-              CURATED FASHION CIRCLE
-            </span>
           </Link>
 
           {/* Central Search Bar (Culture Circle Signature Pill Search) */}
@@ -58,7 +62,7 @@ export default function Navbar() {
                 name="q"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search 300+ authentic shirts, oversized, linen, brands..."
+                placeholder="Search 300+ curated shirts, oversized, linen, brands..."
                 className="w-full bg-[#161616] hover:bg-[#1E1E1E] focus:bg-[#111111] border border-white/10 focus:border-white text-white rounded-full pl-11 pr-12 py-3 text-xs sm:text-sm font-body transition-all placeholder:text-neutral-500 outline-none"
               />
               <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -87,14 +91,14 @@ export default function Navbar() {
 
             {/* Cart Bag */}
             <Link
-              href="/shop"
+              href="/cart"
               className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-full transition-all active:scale-95 shadow-sm"
               aria-label="Shopping Bag"
             >
               <ShoppingBag className="w-4 h-4" />
               <span className="font-cta text-sm font-bold tracking-widest hidden sm:inline uppercase">BAG</span>
-              <span className="w-4 h-4 rounded-full bg-black text-white text-[10px] font-price font-black flex items-center justify-center -ml-0.5">
-                0
+              <span className="min-w-4 h-4 px-1 rounded-full bg-black text-white text-[10px] font-price font-black flex items-center justify-center -ml-0.5">
+                {count}
               </span>
             </Link>
           </div>
@@ -152,13 +156,6 @@ export default function Navbar() {
                 {pill.label}
               </Link>
             ))}
-          </div>
-
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-label uppercase tracking-wider text-neutral-400">
-            <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              100% Verified Legit Sourcing
-            </span>
           </div>
 
         </div>
