@@ -162,7 +162,7 @@ export default function CartPage() {
 
                 <button
                   onClick={() => setCheckout(true)}
-                  className="w-full h-13 flex items-center justify-center gap-2 bg-white hover:bg-neutral-200 text-black font-cta font-bold text-sm tracking-widest uppercase rounded-2xl transition-all active:scale-95 shadow-xl"
+                  className="w-full h-13 flex items-center justify-center gap-2 bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] hover:brightness-110 text-white font-cta font-bold text-sm tracking-widest uppercase rounded-2xl transition-all active:scale-95 shadow-[0_0_20px_rgba(255,45,136,0.35)]"
                 >
                   Proceed to Pay
                   <ArrowRight className="w-4 h-4" />
@@ -299,10 +299,16 @@ export default function CartPage() {
             </div>
 
             <div className="px-6 py-5 space-y-3">
-              <div className="text-center mb-2">
-                <p className="text-lg font-heading text-white tracking-widest uppercase">
-                  SAGGY
-                </p>
+              <div className="text-center mb-2 flex flex-col items-center">
+                <div className="relative h-10 w-[120px] mb-1">
+                  <Image
+                    src="/saggy-logo.png"
+                    alt="SAGGY"
+                    fill
+                    className="object-contain mix-blend-screen"
+                    sizes="120px"
+                  />
+                </div>
                 <p className="text-xs text-neutral-500 font-body">Official Receipt</p>
               </div>
               <div className="border-t border-dashed border-white/10" />
@@ -400,7 +406,7 @@ function CartItemRow({
             </p>
             <Link
               href={`/shop/${item.slug}`}
-              className="font-product text-sm sm:text-base font-bold text-white hover:text-orange-400 transition-colors line-clamp-2 block"
+              className="font-product text-sm sm:text-base font-bold text-white group-hover:text-[#FF2D88] hover:text-[#FF2D88] transition-colors line-clamp-2 block"
             >
               {item.name}
             </Link>

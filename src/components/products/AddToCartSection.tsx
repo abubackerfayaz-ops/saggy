@@ -134,11 +134,11 @@ export default function AddToCartSection({
                   aria-label={`Size ${size}${!isInStock ? " — out of stock" : ""}`}
                   className={`h-12 text-sm font-pill font-bold rounded-xl border transition-all flex items-center justify-center ${
                     isSelected
-                      ? "bg-white text-black border-white shadow-md"
+                      ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white border-[#FF5DAA] shadow-[0_0_12px_rgba(255,45,136,0.35)]"
                       : isInStock
-                      ? "bg-[#161616] text-white border-white/10 hover:border-white/30"
-                      : "bg-[#111111] text-neutral-600 border-white/5 cursor-not-allowed line-through"
-                  } ${sizeError && !isSelected ? "border-rose-400" : ""}`}
+                      ? "bg-[#141318] text-white border-white/10 hover:border-[#FF2D88]/40"
+                      : "bg-[#0d0c10] text-neutral-600 border-white/5 cursor-not-allowed line-through"
+                  } ${sizeError && !isSelected ? "border-[#FF2D88]" : ""}`}
                 >
                   {size}
                 </button>
@@ -156,7 +156,7 @@ export default function AddToCartSection({
         {/* Quantity */}
         <div className="flex items-center gap-3">
           <span className="text-xs font-heading uppercase tracking-wider text-white">Qty</span>
-          <div className="flex items-center bg-[#161616] border border-white/10 rounded-xl overflow-hidden shadow-sm">
+          <div className="flex items-center bg-[#141318] border border-white/10 rounded-xl overflow-hidden shadow-sm">
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               className="w-10 h-10 flex items-center justify-center text-neutral-300 hover:bg-white/10 font-bold text-base transition-colors"
@@ -188,7 +188,7 @@ export default function AddToCartSection({
             className={`flex-1 h-13 flex items-center justify-center gap-2 text-sm font-cta font-bold tracking-widest uppercase rounded-2xl transition-all shadow-md active:scale-95 ${
               addedToCart
                 ? "bg-emerald-600 text-white"
-                : "bg-transparent border-2 border-white text-white hover:bg-white/10"
+                : "bg-transparent border-2 border-white hover:border-[#FF2D88] text-white hover:text-[#FF2D88] hover:bg-white/5"
             }`}
             aria-label={addedToCart ? "Added to bag!" : "Add to bag"}
           >
@@ -198,7 +198,7 @@ export default function AddToCartSection({
 
           <button
             onClick={handleBuyNow}
-            className="flex-1 h-13 flex items-center justify-center gap-2 text-sm font-cta font-bold tracking-widest uppercase rounded-2xl bg-white hover:bg-neutral-200 text-black transition-all shadow-xl active:scale-95"
+            className="flex-1 h-13 flex items-center justify-center gap-2 text-sm font-cta font-bold tracking-widest uppercase rounded-2xl bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] hover:brightness-110 text-white transition-all shadow-[0_0_20px_rgba(255,45,136,0.35)] active:scale-95"
           >
             <Zap className="w-4 h-4" />
             <span>BUY NOW</span>
@@ -209,8 +209,8 @@ export default function AddToCartSection({
             aria-label={wishlisted ? "Remove from wishlist" : "Save to wishlist"}
             className={`h-13 w-13 flex items-center justify-center rounded-2xl border transition-all active:scale-95 shrink-0 shadow-md ${
               wishlisted
-                ? "border-rose-500 bg-rose-500 text-white"
-                : "bg-[#161616] border-white/10 text-neutral-400 hover:text-white hover:border-white/30"
+                ? "border-[#FF2D88] bg-[#FF2D88] text-white shadow-[0_0_12px_rgba(255,45,136,0.5)]"
+                : "bg-[#141318] border-white/10 text-neutral-400 hover:text-white hover:border-[#FF2D88]/40"
             }`}
           >
             <Heart className={`w-5 h-5 ${wishlisted ? "fill-white" : ""}`} />
@@ -319,13 +319,13 @@ export default function AddToCartSection({
             {/* Receipt */}
             <div className="px-6 py-5 space-y-3">
               <div className="text-center mb-2 flex flex-col items-center">
-                <div className="relative h-10 w-[110px] mb-1">
+                <div className="relative h-10 w-[120px] mb-1">
                   <Image
-                    src="/saggy-logo.jpg"
+                    src="/saggy-logo.png"
                     alt="SAGGY"
                     fill
-                    className="object-contain"
-                    sizes="110px"
+                    className="object-contain mix-blend-screen"
+                    sizes="120px"
                   />
                 </div>
                 <p className="text-xs text-neutral-500 font-body">Official Receipt</p>

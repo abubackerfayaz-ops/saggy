@@ -60,8 +60,8 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
             disabled={isPending}
             className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-price font-bold transition-all shadow-sm ${
               page === currentPage
-                ? "bg-white text-black"
-                : "bg-[#161616] border border-white/10 text-neutral-300 hover:text-white hover:border-white/30"
+                ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white shadow-[0_0_12px_rgba(255,45,136,0.4)] border border-[#FF5DAA]/50"
+                : "bg-[#161616] border border-white/10 text-neutral-300 hover:text-white hover:border-[#FF2D88]/40"
             }`}
           >
             {page}

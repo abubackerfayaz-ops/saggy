@@ -93,7 +93,7 @@ export default async function HomePage() {
           {/* Center / Bottom copy */}
           <div className="relative z-20 max-w-2xl space-y-4 my-auto py-6">
             <h1 className="font-hero text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white uppercase leading-[1.05]">
-              THE HOME OF <span className="underline decoration-orange-500 underline-offset-8">CURATED</span> SHIRTS.
+              THE HOME OF <span className="underline decoration-[#FF2D88] underline-offset-8">CURATED</span> SHIRTS.
             </h1>
             <p className="font-body text-sm sm:text-base text-neutral-300 max-w-xl leading-relaxed">
               Discover curated shirts at the guaranteed lowest price, delivered straight to your door.
@@ -102,7 +102,7 @@ export default async function HomePage() {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 href="/shop"
-                className="px-7 py-3 bg-white hover:bg-neutral-200 text-black font-cta font-bold text-lg tracking-widest rounded-full transition-all flex items-center gap-2 shadow-md active:scale-95 uppercase"
+                className="px-7 py-3 bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] hover:brightness-110 text-white font-cta font-bold text-lg tracking-widest rounded-full transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,45,136,0.4)] active:scale-95 uppercase"
               >
                 <span>EXPLORE ALL DROPS</span>
                 <ArrowRight className="w-4 h-4" />
@@ -146,8 +146,8 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-pill font-bold text-orange-400 uppercase tracking-widest">
-              <Flame className="w-3.5 h-3.5 text-orange-500" />
+            <div className="flex items-center gap-1.5 text-xs font-pill font-bold text-[#FF2D88] uppercase tracking-widest">
+              <Flame className="w-3.5 h-3.5 text-[#FF2D88]" />
               <span>HIGH DEMAND</span>
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl text-white tracking-tight mt-1 uppercase">
@@ -209,7 +209,7 @@ export default async function HomePage() {
               tag: "BEST VALUE",
               title: "MAX SAVINGS",
               desc: "Highest catalog discount on our curated selection.",
-              accent: "border-orange-500/40 bg-orange-950/20 hover:border-orange-500",
+              accent: "border-[#FF2D88]/40 bg-[#FF2D88]/10 hover:border-[#FF2D88] shadow-[0_0_20px_rgba(255,45,136,0.15)]",
             },
           ].map((tier) => (
             <Link
@@ -267,7 +267,7 @@ export default async function HomePage() {
               <span className="text-[10px] font-label font-bold text-neutral-400 uppercase tracking-widest block">
                 {cat._count.products} PIECES
               </span>
-              <h3 className="font-product text-base sm:text-lg font-bold text-white group-hover:text-orange-400 transition-colors mt-1">
+              <h3 className="font-product text-base sm:text-lg font-bold text-white group-hover:text-[#FF2D88] transition-colors mt-1">
                 {cat.name}
               </h3>
               <p className="font-body text-xs text-neutral-400 mt-1 line-clamp-1">

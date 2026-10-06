@@ -153,12 +153,14 @@ export default function RootLayout({
       `}
     >
       <body
-        className="min-h-full flex flex-col bg-[#0A0A0A] text-[#EDEDED] selection:bg-white selection:text-black antialiased"
+        className="min-h-full flex flex-col bg-[#070709] text-[#EDEDED] selection:bg-[#FF2D88] selection:text-white antialiased relative"
         style={{ fontFamily: 'var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}
       >
+        {/* Ambient Top Glow matching pink flame logo */}
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[320px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(255,45,136,0.12),transparent_70%)] pointer-events-none z-0" />
         <CartProvider>
           <Navbar />
-          <main className="flex-1 w-full">{children}</main>
+          <main className="flex-1 w-full relative z-10">{children}</main>
           <Footer />
         </CartProvider>
       </body>

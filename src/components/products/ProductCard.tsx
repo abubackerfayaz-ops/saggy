@@ -59,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-md ${
             wishlisted
-              ? "bg-rose-500 text-white"
+              ? "bg-[#FF2D88] text-white shadow-[0_0_12px_rgba(255,45,136,0.6)]"
               : "bg-black/60 backdrop-blur-md text-white/80 hover:text-white hover:bg-black/90"
           }`}
         >
@@ -100,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Product Title */}
           <Link href={`/shop/${product.slug}`} className="block mt-1">
-            <h3 className="font-product text-xs sm:text-sm font-semibold text-white leading-snug line-clamp-2 hover:underline">
+            <h3 className="font-product text-xs sm:text-sm font-semibold text-white leading-snug line-clamp-2 group-hover:text-[#FF2D88] transition-colors">
               {product.name}
             </h3>
           </Link>
@@ -119,7 +119,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <Link
             href={`/shop/${product.slug}`}
-            className="py-2 px-3.5 bg-white hover:bg-neutral-200 text-black font-cta text-sm tracking-widest rounded-xl flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0 shadow-md uppercase"
+            className="py-2 px-3.5 bg-white hover:bg-gradient-to-r hover:from-[#FF2D88] hover:to-[#FF5DAA] hover:text-white text-black font-cta text-sm tracking-widest rounded-xl flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0 shadow-md uppercase"
           >
             <span>VIEW DEALS</span>
             <ArrowRight className="w-3.5 h-3.5" />

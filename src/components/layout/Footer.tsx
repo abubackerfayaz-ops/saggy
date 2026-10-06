@@ -47,13 +47,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 lg:gap-12">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="inline-block">
-              <div className="relative h-14 w-[160px]">
+            <Link href="/" className="inline-block group">
+              <div className="relative h-12 w-[150px]">
                 <Image
-                  src="/saggy-logo.jpg"
+                  src="/saggy-logo.png"
                   alt="SAGGY"
                   fill
-                  className="object-contain object-left"
+                  className="object-contain object-left mix-blend-screen group-hover:opacity-85 transition-opacity"
                   sizes="160px"
                 />
               </div>

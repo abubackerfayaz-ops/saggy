@@ -65,7 +65,7 @@ export default function ShopToolbar({ total }: ShopToolbarProps) {
           <SlidersHorizontal className="w-4 h-4 text-white" />
           <span>FILTERS</span>
           {activeFilterCount > 0 && (
-            <span className="w-4 h-4 rounded-full bg-white text-black text-[10px] font-price font-bold flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-[#FF2D88] text-white text-[10px] font-price font-bold flex items-center justify-center shadow-[0_0_8px_rgba(255,45,136,0.6)]">
               {activeFilterCount}
             </span>
           )}
@@ -78,7 +78,7 @@ export default function ShopToolbar({ total }: ShopToolbarProps) {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Search shirts, linen, floral, oversized..."
-            className="w-full bg-[#181818] hover:bg-[#1E1E1E] focus:bg-[#101010] border border-white/10 focus:border-white text-white rounded-xl pl-9 pr-8 py-2.5 text-xs sm:text-sm font-body focus:outline-none transition-all placeholder:text-neutral-500"
+            className="w-full bg-[#181818] hover:bg-[#1E1E1E] focus:bg-[#101010] border border-white/10 focus:border-[#FF2D88] focus:ring-1 focus:ring-[#FF2D88]/40 text-white rounded-xl pl-9 pr-8 py-2.5 text-xs sm:text-sm font-body focus:outline-none transition-all placeholder:text-neutral-500"
           />
           <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           {inputValue && (

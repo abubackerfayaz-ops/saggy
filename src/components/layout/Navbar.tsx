@@ -42,14 +42,14 @@ export default function Navbar() {
 
           {/* Brand Logo - Saggy Image Logo */}
           <Link href="/" className="flex items-center shrink-0 group">
-            <div className="relative h-12 sm:h-14 w-[120px] sm:w-[150px] overflow-hidden">
+            <div className="relative h-10 sm:h-12 w-[125px] sm:w-[155px]">
               <Image
-                src="/saggy-logo.jpg"
+                src="/saggy-logo.png"
                 alt="SAGGY"
                 fill
                 priority
-                className="object-contain object-left group-hover:opacity-80 transition-opacity"
-                sizes="150px"
+                className="object-contain object-left mix-blend-screen group-hover:opacity-85 transition-opacity"
+                sizes="160px"
               />
             </div>
           </Link>
@@ -63,7 +63,7 @@ export default function Navbar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search 300+ curated shirts, oversized, linen, brands..."
-                className="w-full bg-[#161616] hover:bg-[#1E1E1E] focus:bg-[#111111] border border-white/10 focus:border-white text-white rounded-full pl-11 pr-12 py-3 text-xs sm:text-sm font-body transition-all placeholder:text-neutral-500 outline-none"
+                className="w-full bg-[#141318] hover:bg-[#1a1820] focus:bg-[#0f0e13] border border-white/10 focus:border-[#FF2D88] focus:ring-1 focus:ring-[#FF2D88]/40 text-white rounded-full pl-11 pr-12 py-3 text-xs sm:text-sm font-body transition-all placeholder:text-neutral-500 outline-none"
               />
               <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
               {searchQuery && (
@@ -83,7 +83,7 @@ export default function Navbar() {
             {/* Wishlist */}
             <Link
               href="/shop"
-              className="p-2.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/10 transition-colors relative"
+              className="p-2.5 text-neutral-400 hover:text-[#FF2D88] rounded-full hover:bg-white/10 transition-colors relative"
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5" />
@@ -97,7 +97,7 @@ export default function Navbar() {
             >
               <ShoppingBag className="w-4 h-4" />
               <span className="font-cta text-sm font-bold tracking-widest hidden sm:inline uppercase">BAG</span>
-              <span className="min-w-4 h-4 px-1 rounded-full bg-black text-white text-[10px] font-price font-black flex items-center justify-center -ml-0.5">
+              <span className="min-w-4 h-4 px-1 rounded-full bg-[#FF2D88] text-white text-[10px] font-price font-black flex items-center justify-center -ml-0.5 shadow-[0_0_8px_rgba(255,45,136,0.6)]">
                 {count}
               </span>
             </Link>
@@ -113,8 +113,8 @@ export default function Navbar() {
               href={pill.href}
               className={`cc-pill shrink-0 font-pill tracking-wide text-xs sm:text-sm ${
                 pill.isHot
-                  ? "bg-white text-black hover:bg-neutral-200"
-                  : "cc-pill-inactive"
+                  ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white shadow-[0_0_12px_rgba(255,45,136,0.35)] border border-[#FF5DAA]/50 hover:brightness-110"
+                  : "cc-pill-inactive hover:border-[#FF2D88]/40"
               }`}
             >
               <span>{pill.label}</span>
@@ -122,7 +122,7 @@ export default function Navbar() {
           ))}
           <Link
             href="/shop"
-            className="text-xs font-cta uppercase tracking-widest font-bold text-neutral-400 hover:text-white ml-auto shrink-0 pl-3 flex items-center gap-1.5"
+            className="text-xs font-cta uppercase tracking-widest font-bold text-neutral-400 hover:text-[#FF2D88] ml-auto shrink-0 pl-3 flex items-center gap-1.5 transition-colors"
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
             <span>Filter All</span>

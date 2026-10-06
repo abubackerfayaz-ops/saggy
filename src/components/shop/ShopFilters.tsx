@@ -126,7 +126,7 @@ export default function ShopFilters({
                 }}
                 className={`w-full text-left px-3 py-2 rounded-xl text-xs font-pill tracking-wide transition-all ${
                   isSelected
-                    ? "bg-white text-black shadow-md font-bold"
+                    ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white shadow-[0_0_12px_rgba(255,45,136,0.35)] font-bold border border-[#FF5DAA]/50"
                     : "bg-[#181818] border border-white/5 text-neutral-300 hover:bg-[#222222] hover:text-white"
                 }`}
               >
@@ -149,12 +149,12 @@ export default function ShopFilters({
               onClick={() => setParam("category", activeCategory === cat ? null : cat)}
               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-pill tracking-wide transition-all flex items-center justify-between ${
                 activeCategory === cat
-                  ? "bg-white text-black font-bold"
+                  ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white font-bold shadow-[0_0_10px_rgba(255,45,136,0.3)]"
                   : "text-neutral-300 hover:bg-[#1A1A1A] hover:text-white"
               }`}
             >
               <span>{cat}</span>
-              {activeCategory === cat && <Check className="w-3.5 h-3.5 text-black" />}
+              {activeCategory === cat && <Check className="w-3.5 h-3.5 text-white" />}
             </button>
           ))}
         </div>
@@ -191,7 +191,7 @@ export default function ShopFilters({
                 }}
                 className={`w-full text-left px-3 py-2 rounded-xl text-xs font-pill tracking-wide transition-all ${
                   isSelected
-                    ? "bg-white text-black font-bold"
+                    ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] text-white font-bold shadow-[0_0_10px_rgba(255,45,136,0.3)]"
                     : "text-neutral-300 hover:bg-[#1A1A1A] hover:text-white"
                 }`}
               >
@@ -214,8 +214,8 @@ export default function ShopFilters({
               onClick={() => setParam("size", activeSize === size ? null : size)}
               className={`py-2 text-xs font-pill font-bold rounded-xl border transition-all text-center ${
                 activeSize === size
-                  ? "bg-white border-white text-black"
-                  : "border-white/10 bg-[#161616] text-neutral-300 hover:border-white/30 hover:text-white"
+                  ? "bg-gradient-to-r from-[#FF2D88] to-[#FF5DAA] border-[#FF5DAA] text-white shadow-[0_0_10px_rgba(255,45,136,0.35)]"
+                  : "border-white/10 bg-[#161616] text-neutral-300 hover:border-[#FF2D88]/40 hover:text-white"
               }`}
             >
               {size}
