@@ -50,12 +50,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) setItems(parsed);
+        // Reading an external store after mount can only be done in an effect;
+        // deferring the first render to the next tick keeps hydration intact.
+        queueMicrotask(() => {
+          if (Array.isArray(parsed)) setItems(parsed);
+          setHydrated(true);
+        });
+        return;
       }
     } catch {
       /* corrupted storage — start fresh */
     }
-    setHydrated(true);
+    queueMicrotask(() => setHydrated(true));
   }, []);
 
   // Persist on change (skip until hydrated so we never wipe storage)

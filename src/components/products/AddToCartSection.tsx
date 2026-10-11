@@ -2,9 +2,27 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingBag, Heart, Zap, X, CheckCircle, Printer } from "lucide-react";
+import {
+  ShoppingBag,
+  Heart,
+  Zap,
+  X,
+  CheckCircle,
+  Printer,
+  ArrowLeft,
+  Loader2,
+} from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/components/cart/CartProvider";
+import logo from "@/assets/saggy-logo.webp";
+import qrPayment from "@/assets/qr-payment.png";
+import CheckoutDetailsForm from "@/components/checkout/CheckoutDetailsForm";
+import {
+  calcShipping,
+  placeOrder,
+  type CheckoutDetails,
+  type PlacedOrder,
+} from "@/lib/checkout";
 
 interface ProductInfo {
   id: string;
@@ -32,11 +50,7 @@ interface AddToCartSectionProps {
   variants: VariantInfo[];
 }
 
-type FlowStep = "idle" | "qr" | "bill";
-
-function generateOrderId() {
-  return "SGY" + Date.now().toString(36).toUpperCase();
-}
+type FlowStep = "idle" | "details" | "qr" | "bill";
 
 export default function AddToCartSection({
   product,
@@ -50,10 +64,10 @@ export default function AddToCartSection({
   const [addedToCart, setAddedToCart] = useState(false);
   const [sizeError, setSizeError] = useState(false);
   const [flowStep, setFlowStep] = useState<FlowStep>("idle");
-  const [orderId] = useState(generateOrderId);
-  const [orderTime] = useState(() =>
-    new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-  );
+  const [details, setDetails] = useState<CheckoutDetails | null>(null);
+  const [placing, setPlacing] = useState(false);
+  const [placeError, setPlaceError] = useState<string | null>(null);
+  const [placed, setPlaced] = useState<PlacedOrder | null>(null);
   const { addItem } = useCart();
 
   const selectedVariant = variants.find(
@@ -61,6 +75,8 @@ export default function AddToCartSection({
   );
 
   const totalAmount = product.sellingPrice * quantity;
+  const shipping = calcShipping(totalAmount);
+  const grandTotal = totalAmount + shipping;
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -91,11 +107,65 @@ export default function AddToCartSection({
       setTimeout(() => setSizeError(false), 1500);
       return;
     }
+    setPlaceError(null);
+    setFlowStep("details");
+  };
+
+  const handleDetails = (next: CheckoutDetails) => {
+    setDetails(next);
+    setPlaceError(null);
     setFlowStep("qr");
   };
 
-  const handlePaid = () => setFlowStep("bill");
-  const handleClose = () => setFlowStep("idle");
+  const handlePaid = async () => {
+    if (placing) return;
+    setPlacing(true);
+    setPlaceError(null);
+    try {
+      const order = await placeOrder({
+        customer: {
+          name: details?.name ?? "",
+          phone: details?.phone ?? "",
+          email: details?.email ?? "",
+        },
+        address: {
+          line1: details?.line1 ?? "",
+          line2: details?.line2 || undefined,
+          city: details?.city ?? "",
+          state: details?.state ?? "",
+          pinCode: details?.pinCode ?? "",
+        },
+        items: [
+          {
+            productId: product.id,
+            variantId: selectedVariant?.id,
+            size: selectedSize,
+            color: selectedVariant?.color ?? null,
+            quantity,
+          },
+        ],
+        paymentMethod: "UPI",
+      });
+      setPlaced(order);
+      setFlowStep("bill");
+    } catch (error) {
+      setPlaceError(
+        error instanceof Error
+          ? error.message
+          : "Network error. Check your connection and try again."
+      );
+    } finally {
+      setPlacing(false);
+    }
+  };
+
+  const handleClose = () => {
+    setFlowStep("idle");
+    setPlaceError(null);
+    setPlacing(false);
+    setPlaced(null);
+    setDetails(null);
+  };
 
   return (
     <>
@@ -218,6 +288,50 @@ export default function AddToCartSection({
         </div>
       </div>
 
+      {/* ── DELIVERY DETAILS MODAL ── */}
+      {flowStep === "details" && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+        >
+          <div className="relative bg-[#111111] border border-white/10 rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
+              <div>
+                <p className="text-xs font-label uppercase tracking-widest text-neutral-400">Step 1 of 2</p>
+                <h2 className="text-xl font-heading text-white mt-0.5 uppercase tracking-wide">Delivery Details</h2>
+              </div>
+              <button
+                onClick={handleClose}
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                aria-label="Close checkout"
+              >
+                <X className="w-4 h-4 text-neutral-400" />
+              </button>
+            </div>
+
+            <div className="px-6 py-5 max-h-[70vh] overflow-y-auto">
+              <p className="text-xs font-body text-neutral-500 mb-4">
+                Tell us where to ship <span className="text-white font-semibold">{product.name}</span>.
+              </p>
+              <CheckoutDetailsForm
+                onSubmit={handleDetails}
+                submitLabel="Continue to Payment"
+                footer={
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="w-full text-xs font-cta font-bold uppercase tracking-widest text-neutral-500 hover:text-white py-1 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── QR PAYMENT MODAL ── */}
       {flowStep === "qr" && (
         <div
@@ -228,9 +342,18 @@ export default function AddToCartSection({
           <div className="relative bg-[#111111] border border-white/10 rounded-3xl max-w-sm w-full shadow-2xl overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
-              <div>
-                <p className="text-xs font-label uppercase tracking-widest text-neutral-400">Pay via UPI</p>
-                <h2 className="text-xl font-heading text-white mt-0.5">Scan &amp; Pay</h2>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => { setPlaceError(null); setFlowStep("details"); }}
+                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                  aria-label="Edit delivery details"
+                >
+                  <ArrowLeft className="w-4 h-4 text-neutral-400" />
+                </button>
+                <div>
+                  <p className="text-xs font-label uppercase tracking-widest text-neutral-400">Step 2 of 2 · Pay via UPI</p>
+                  <h2 className="text-xl font-heading text-white mt-0.5">Scan &amp; Pay</h2>
+                </div>
               </div>
               <button
                 onClick={handleClose}
@@ -245,11 +368,11 @@ export default function AddToCartSection({
             <div className="px-6 py-3 bg-white/[0.03] border-b border-white/5">
               <div className="flex justify-between items-center">
                 <span className="font-body text-neutral-400 text-sm truncate max-w-[65%]">{product.name}</span>
-                <span className="font-price font-bold text-white text-sm">{formatPrice(totalAmount)}</span>
+                <span className="font-price font-bold text-white text-sm">{formatPrice(grandTotal)}</span>
               </div>
               <div className="flex justify-between items-center mt-0.5">
                 <span className="text-xs text-neutral-500">Size: {selectedSize} · Qty: {quantity}</span>
-                <span className="text-xs text-neutral-600 font-label uppercase tracking-wide">#{orderId}</span>
+                <span className="text-xs text-neutral-600 font-label uppercase tracking-wide">SAGGY</span>
               </div>
             </div>
 
@@ -257,9 +380,10 @@ export default function AddToCartSection({
             <div className="px-6 py-5 flex flex-col items-center gap-4">
               <div className="relative w-52 h-52 rounded-2xl overflow-hidden border border-white/10 shadow-lg">
                 <Image
-                  src="/qr-payment.png"
+                  src={qrPayment}
                   alt="UPI QR Code — Scan to pay"
                   fill
+                  unoptimized
                   className="object-cover"
                 />
               </div>
@@ -268,23 +392,51 @@ export default function AddToCartSection({
                 <p className="text-xs text-neutral-500 font-label mb-0.5">UPI ID</p>
                 <p className="text-sm font-price font-bold text-white tracking-wider">abubackerfayaz-1@oksbi</p>
               </div>
+              <div className="w-full flex items-center justify-between px-4 py-2 text-xs font-body text-neutral-400">
+                <span>Item total</span>
+                <span className="font-price text-white">{formatPrice(totalAmount)}</span>
+              </div>
+              <div className="w-full flex items-center justify-between px-4 pb-2 text-xs font-body text-neutral-400">
+                <span>Delivery</span>
+                <span className="font-price text-white">
+                  {shipping === 0 ? <span className="text-emerald-400">FREE</span> : formatPrice(shipping)}
+                </span>
+              </div>
               <div className="w-full flex items-center justify-center gap-2 bg-white rounded-2xl py-3">
                 <span className="text-sm font-heading text-black uppercase tracking-wide">Amount:</span>
-                <span className="text-lg font-price font-bold text-black">{formatPrice(totalAmount)}</span>
+                <span className="text-lg font-price font-bold text-black">{formatPrice(grandTotal)}</span>
               </div>
             </div>
 
             {/* Confirm */}
             <div className="px-6 pb-6">
+              {placeError && (
+                <div className="mb-3 bg-rose-500/10 border border-rose-500/30 rounded-xl px-3.5 py-3">
+                  <p className="text-xs text-rose-400 font-body leading-relaxed">{placeError}</p>
+                  <p className="text-[11px] text-neutral-500 font-body mt-1">
+                    Your payment is safe — retry to save the order.
+                  </p>
+                </div>
+              )}
               <button
                 onClick={handlePaid}
-                className="w-full h-13 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-cta font-bold text-sm uppercase tracking-widest rounded-2xl transition-all active:scale-95 shadow-lg"
+                disabled={placing}
+                className="w-full h-13 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-cta font-bold text-sm uppercase tracking-widest rounded-2xl transition-all active:scale-95 shadow-lg disabled:opacity-70"
               >
-                <CheckCircle className="w-4 h-4" />
-                I&apos;VE PAID
+                {placing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Saving Order…
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    I&apos;VE PAID
+                  </>
+                )}
               </button>
               <p className="text-xs text-neutral-600 text-center mt-3 font-body">
-                Click only after completing payment in your UPI app
+                {placing ? "Please don't close this window" : "Click only after completing payment in your UPI app"}
               </p>
             </div>
           </div>
@@ -292,7 +444,7 @@ export default function AddToCartSection({
       )}
 
       {/* ── BILL / RECEIPT MODAL ── */}
-      {flowStep === "bill" && (
+      {flowStep === "bill" && placed && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ backgroundColor: "rgba(0,0,0,0.92)", backdropFilter: "blur(10px)" }}
@@ -321,9 +473,10 @@ export default function AddToCartSection({
               <div className="text-center mb-2 flex flex-col items-center">
                 <div className="relative h-10 w-[120px] mb-1">
                   <Image
-                    src="/saggy-logo.png"
+                    src={logo}
                     alt="SAGGY"
                     fill
+                    unoptimized
                     className="object-contain mix-blend-screen"
                     sizes="120px"
                   />
@@ -332,12 +485,25 @@ export default function AddToCartSection({
               </div>
               <div className="border-t border-dashed border-white/10" />
               {[
-                { label: "Order ID", value: `#${orderId}` },
-                { label: "Date", value: orderTime },
+                { label: "Order #", value: placed.orderNumber },
+                {
+                  label: "Date",
+                  value: new Date(placed.createdAt).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                  }),
+                },
                 { label: "Product", value: product.name },
                 { label: "Brand", value: product.brand },
                 { label: "Size", value: selectedSize },
                 { label: "Quantity", value: `${quantity}` },
+                {
+                  label: "Delivery",
+                  value: placed.shippingFee === 0 ? "Free" : formatPrice(placed.shippingFee),
+                },
+                {
+                  label: "Ship to",
+                  value: `${details?.city ?? ""} ${details?.pinCode ?? ""}`.trim() || "—",
+                },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between text-sm">
                   <span className="font-label uppercase tracking-wider text-neutral-500 text-xs">{label}</span>
@@ -349,9 +515,13 @@ export default function AddToCartSection({
                 <span className="font-label uppercase tracking-wider text-neutral-500 text-xs">Unit Price</span>
                 <span className="font-price text-white">{formatPrice(product.sellingPrice)}</span>
               </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-label uppercase tracking-wider text-neutral-500 text-xs">Item Total</span>
+                <span className="font-price text-white">{formatPrice(totalAmount)}</span>
+              </div>
               <div className="flex justify-between items-center bg-white/5 rounded-xl px-3 py-2.5">
                 <span className="font-heading uppercase tracking-wider text-white text-sm">Total Paid</span>
-                <span className="font-price font-bold text-white text-xl">{formatPrice(totalAmount)}</span>
+                <span className="font-price font-bold text-white text-xl">{formatPrice(placed.total)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="font-label uppercase tracking-wider text-neutral-500 text-xs">Payment</span>

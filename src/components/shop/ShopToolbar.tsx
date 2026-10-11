@@ -16,11 +16,16 @@ export default function ShopToolbar({ total }: ShopToolbarProps) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(searchParams.get("q") ?? "");
+  const query = searchParams.get("q") ?? "";
+  const [inputValue, setInputValue] = useState(query);
 
-  useEffect(() => {
-    setInputValue(searchParams.get("q") ?? "");
-  }, [searchParams]);
+  // Keep the field in sync when the URL query changes underneath us (back
+  // button, cleared filters) without reaching for an effect.
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
+    setInputValue(query);
+  }
 
   const handleSearch = useCallback(
     (value: string) => {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag, Heart, Search, Menu, X, SlidersHorizontal } from "lucide-react";
 import { useCart } from "@/components/cart/CartProvider";
+import logo from "@/assets/saggy-logo.webp";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,10 +45,11 @@ export default function Navbar() {
           <Link href="/" className="flex items-center shrink-0 group">
             <div className="relative h-10 sm:h-12 w-[125px] sm:w-[155px]">
               <Image
-                src="/saggy-logo.png"
+                src={logo}
                 alt="SAGGY"
                 fill
                 priority
+                unoptimized
                 className="object-contain object-left mix-blend-screen group-hover:opacity-85 transition-opacity"
                 sizes="160px"
               />

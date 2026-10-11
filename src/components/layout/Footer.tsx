@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Truck, RotateCcw, Tag, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
+import logo from "@/assets/saggy-logo.webp";
 
 export default function Footer() {
   return (
@@ -50,9 +51,10 @@ export default function Footer() {
             <Link href="/" className="inline-block group">
               <div className="relative h-12 w-[150px]">
                 <Image
-                  src="/saggy-logo.png"
+                  src={logo}
                   alt="SAGGY"
                   fill
+                  unoptimized
                   className="object-contain object-left mix-blend-screen group-hover:opacity-85 transition-opacity"
                   sizes="160px"
                 />

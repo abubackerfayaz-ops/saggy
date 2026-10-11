@@ -9,16 +9,24 @@
 # ⚠️ ACTION REQUIRED (one time): Render Dashboard → slaggy → Environment
 #     Set DATABASE_URL to your Supabase session-pooler string:
 #     postgresql://postgres.mxmeixinyhldzwzazjjd:<PASSWORD>@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require&schema=public
+#
+# ⚠️ ACTION REQUIRED (one time): Render Dashboard → slaggy → Environment
+#     Set ADMIN_PASSWORD to a secret of your choice. It unlocks the private
+#     orders dashboard at https://saggy.onrender.com/admin — until it is set,
+#     /admin stays locked and shows a setup notice.
 
 services:
   - type: web
     name: saggy
     runtime: node
     plan: free
+    healthCheckPath: /health
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_PASSWORD
         sync: false
