@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
-    "scrape-fadon": "tsx prisma/scrape-fadon.ts"
+    "scrape-fadon": "tsx prisma/scrape-fadon.ts",
+    "scrape-thayyil": "tsx prisma/scrape-thayyil.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

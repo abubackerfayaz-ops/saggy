@@ -62,18 +62,18 @@ async function getProducts(sp: Awaited<SearchParamsType>) {
 
   if (q) {
     where.OR = [
-      { name: { contains: q } },
-      { description: { contains: q } },
-      { brand: { contains: q } },
+      { name: { contains: q, mode: "insensitive" } },
+      { description: { contains: q, mode: "insensitive" } },
+      { brand: { contains: q, mode: "insensitive" } },
     ];
   }
 
   if (category) {
-    where.category = { name: { equals: category } };
+    where.category = { name: { equals: category, mode: "insensitive" } };
   }
 
   if (brand) {
-    where.brand = { equals: brand };
+    where.brand = { equals: brand, mode: "insensitive" };
   }
 
   if (source) {

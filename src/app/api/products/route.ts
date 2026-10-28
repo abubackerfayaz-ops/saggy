@@ -27,22 +27,22 @@ export async function GET(request: NextRequest) {
 
     if (q) {
       where.OR = [
-        { name: { contains: q } },
-        { brand: { contains: q } },
-        { description: { contains: q } },
-        { fabric: { contains: q } },
-        { pattern: { contains: q } },
-        { fit: { contains: q } },
-        { category: { name: { contains: q } } },
+        { name: { contains: q, mode: "insensitive" } },
+        { brand: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { fabric: { contains: q, mode: "insensitive" } },
+        { pattern: { contains: q, mode: "insensitive" } },
+        { fit: { contains: q, mode: "insensitive" } },
+        { category: { name: { contains: q, mode: "insensitive" } } },
       ];
     }
 
     if (category) {
-      where.category = { name: { equals: category } };
+      where.category = { name: { equals: category, mode: "insensitive" } };
     }
 
     if (brand) {
-      where.brand = { contains: brand };
+      where.brand = { contains: brand, mode: "insensitive" };
     }
 
     if (source) {
